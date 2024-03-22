@@ -10,8 +10,6 @@ const prevButton = document.querySelector('[data-js="button-prev"]');
 const nextButton = document.querySelector('[data-js="button-next"]');
 const pagination = document.querySelector('[data-js="pagination"]');
 
-// const searchQuery = "";
-
 let page = 1;
 let updatedPage = `?page=${page}`;
 
@@ -27,7 +25,7 @@ async function fetchCharacters(param) {
   return data;
 }
 
-const data = await fetchCharacters();
+const data = await fetchCharacters("");
 const maxPage = data.info.pages;
 pagination.textContent = `${page} / ${maxPage}`;
 
@@ -46,15 +44,14 @@ prevButton.addEventListener("click", async () => {
     page--;
     updatedPage = `?page=${page}`;
     pagination.textContent = `${page} / ${maxPage}`;
-    await fetchCharacters();
     const data = await fetchCharacters(updatedPage);
     render(data);
   }
 });
 
-function render(data) {
+async function render(data) {
   try {
-    const data = await fetchCharacters();
+    const data = await fetchCharacters(updatedPage);
     data.results.forEach((card) => {
       const newCard = CharacterCard(card);
       cardContainer.appendChild(newCard);
@@ -74,11 +71,9 @@ searchBar.addEventListener("submit", async (event) => {
   const formData = new FormData(event.target);
   const searchQueryInput = Object.fromEntries(formData);
   const query = `?name=${searchQueryInput.query}`;
-  // updatedPage = "";
 
   try {
     const data = await fetchCharacters(query);
-
     data.results.forEach((card) => {
       const newCard = CharacterCard(card);
       cardContainer.appendChild(newCard);
