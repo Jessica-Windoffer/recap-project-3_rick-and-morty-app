@@ -1,6 +1,5 @@
 export default function CharacterCard(card) {
   const list = document.createElement("li");
-  const ulElement = document.querySelector('[data-js="card-container"]');
   list.classList.add("card");
 
   list.innerHTML = `
