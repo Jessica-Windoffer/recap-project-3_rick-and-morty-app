@@ -14,11 +14,12 @@ const pagination = document.querySelector('[data-js="pagination"]');
 const searchQuery = "";
 
 let page = 1;
+let updatedPage = `?page=${page}`;
 
 async function fetchCharacters() {
   cardContainer.innerHTML = "";
   const response = await fetch(
-    `https://rickandmortyapi.com/api/character?page=${page}`
+    `https://rickandmortyapi.com/api/character${updatedPage}`
   );
   if (!response.ok) {
     throw new Error("Not valid");
@@ -34,6 +35,7 @@ pagination.textContent = `${page} / ${maxPage}`;
 nextButton.addEventListener("click", async () => {
   if (page < maxPage) {
     page++;
+    updatedPage = `?page=${page}`;
     pagination.textContent = `${page} / ${maxPage}`;
     const data = await fetchCharacters();
     render(data);
@@ -43,6 +45,7 @@ nextButton.addEventListener("click", async () => {
 prevButton.addEventListener("click", async () => {
   if (page > 1) {
     page--;
+    updatedPage = `?page=${page}`;
     pagination.textContent = `${page} / ${maxPage}`;
     await fetchCharacters();
     const data = await fetchCharacters();
