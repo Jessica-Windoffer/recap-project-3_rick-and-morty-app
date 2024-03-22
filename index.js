@@ -28,28 +28,29 @@ async function fetchCharacters() {
 }
 
 const data = await fetchCharacters();
-
 const maxPage = data.info.pages;
-
 pagination.textContent = `${page} / ${maxPage}`;
 
-nextButton.addEventListener("click", () => {
+nextButton.addEventListener("click", async () => {
   if (page < maxPage) {
     page++;
     pagination.textContent = `${page} / ${maxPage}`;
-    fetchCharacters();
+    const data = await fetchCharacters();
+    render(data);
   }
 });
 
-prevButton.addEventListener("click", () => {
+prevButton.addEventListener("click", async () => {
   if (page > 1) {
     page--;
     pagination.textContent = `${page} / ${maxPage}`;
-    fetchCharacters();
+    await fetchCharacters();
+    const data = await fetchCharacters();
+    render(data);
   }
 });
 
-function render() {
+function render(data) {
   try {
     data.results.forEach((card) => {
       const newCard = CharacterCard(card);
@@ -62,4 +63,4 @@ function render() {
   }
 }
 
-render();
+render(data);
