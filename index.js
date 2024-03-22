@@ -10,16 +10,15 @@ const prevButton = document.querySelector('[data-js="button-prev"]');
 const nextButton = document.querySelector('[data-js="button-next"]');
 const pagination = document.querySelector('[data-js="pagination"]');
 
-// States
-const searchQuery = "";
+// const searchQuery = "";
 
 let page = 1;
 let updatedPage = `?page=${page}`;
 
-async function fetchCharacters() {
+async function fetchCharacters(param) {
   cardContainer.innerHTML = "";
   const response = await fetch(
-    `https://rickandmortyapi.com/api/character${updatedPage}`
+    `https://rickandmortyapi.com/api/character${param}`
   );
   if (!response.ok) {
     throw new Error("Not valid");
@@ -37,7 +36,7 @@ nextButton.addEventListener("click", async () => {
     page++;
     updatedPage = `?page=${page}`;
     pagination.textContent = `${page} / ${maxPage}`;
-    const data = await fetchCharacters();
+    const data = await fetchCharacters(updatedPage);
     render(data);
   }
 });
@@ -48,22 +47,45 @@ prevButton.addEventListener("click", async () => {
     updatedPage = `?page=${page}`;
     pagination.textContent = `${page} / ${maxPage}`;
     await fetchCharacters();
-    const data = await fetchCharacters();
+    const data = await fetchCharacters(updatedPage);
     render(data);
   }
 });
 
 function render(data) {
   try {
+    const data = await fetchCharacters();
     data.results.forEach((card) => {
       const newCard = CharacterCard(card);
       cardContainer.appendChild(newCard);
     });
   } catch (error) {
     const listElement = document.createElement("li");
-    listElement.textContent = Error;
+    listElement.textContent = "Error";
     cardContainer.appendChild(listElement);
   }
 }
 
 render(data);
+
+searchBar.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const formData = new FormData(event.target);
+  const searchQueryInput = Object.fromEntries(formData);
+  const query = `?name=${searchQueryInput.query}`;
+  // updatedPage = "";
+
+  try {
+    const data = await fetchCharacters(query);
+
+    data.results.forEach((card) => {
+      const newCard = CharacterCard(card);
+      cardContainer.appendChild(newCard);
+    });
+  } catch (error) {
+    const listElement = document.createElement("li");
+    listElement.textContent = "Error";
+    cardContainer.appendChild(listElement);
+  }
+});
