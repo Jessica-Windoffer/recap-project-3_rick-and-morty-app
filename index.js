@@ -26,7 +26,6 @@ async function fetchCharacters() {
 }
 
 const data = await fetchCharacters();
-console.log(data.results[0].name);
 
 function render() {
   try {
@@ -35,8 +34,8 @@ function render() {
       cardContainer.appendChild(newCard);
     });
   } catch (error) {
-    listElement = document.createElement("li");
-    listElement.textContent = "Not valid.";
+    const listElement = document.createElement("li");
+    listElement.textContent = Error;
     cardContainer.appendChild(listElement);
   }
 }
