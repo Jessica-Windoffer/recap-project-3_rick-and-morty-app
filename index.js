@@ -48,6 +48,7 @@ searchBar.addEventListener("submit", async (event) => {
   const formData = new FormData(event.target);
   const searchQueryInput = Object.fromEntries(formData);
   const query = `?name=${searchQueryInput.query}`;
+  // updatedPage = "";
 
   try {
     const data = await fetchCharacters(query);
